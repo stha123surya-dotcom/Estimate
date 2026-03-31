@@ -87,6 +87,14 @@ function calculateAll() {
         "Rs. " + Math.round(totalCost).toLocaleString();
 }
 
+    // UPDATE UI
+    document.getElementById("totalArea").innerText =
+        totalArea.toLocaleString() + " sq.ft";
+
+    document.getElementById("totalCost").innerText =
+        "Rs. " + Math.round(totalCost).toLocaleString();
+}
+
 // INIT
 document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("floorCount").addEventListener("input", generateFloors);
