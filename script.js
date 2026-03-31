@@ -62,21 +62,29 @@ function calculateFloor(floor) {
 }
 
 function calculateAll() {
-    const count = document.getElementById("floorCount").value;
+    const count = parseInt(document.getElementById("floorCount").value) || 1;
     let totalArea = 0;
+    let totalCost = 0;
+
+    const baseRate = parseFloat(document.getElementById("costType").value) || 0;
 
     for (let i = 1; i <= count; i++) {
-        totalArea += calculateFloor(i);
+        let floorArea = calculateFloor(i);
+        totalArea += floorArea;
+
+        // COST LOGIC
+        let rateMultiplier = (i === 1) ? 1.5 : 1; // 1st floor = 1.5x
+        let floorCost = floorArea * baseRate * rateMultiplier;
+
+        totalCost += floorCost;
     }
 
-    const rate = document.getElementById("costType").value;
-    const totalCost = totalArea * rate;
-
+    // UPDATE UI
     document.getElementById("totalArea").innerText =
         totalArea.toLocaleString() + " sq.ft";
 
     document.getElementById("totalCost").innerText =
-        "Rs. " + totalCost.toLocaleString();
+        "Rs. " + Math.round(totalCost).toLocaleString();
 }
 
 // INIT
