@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="dashboard">
+  <h1>Blog Dashboard</h1>
+
+  <input type="text" id="title" placeholder="Blog Title">
+  <textarea id="content" placeholder="Write your blog..."></textarea>
+
+  <button onclick="addPost()">Publish Blog</button>
+
+  <h2>All Blogs</h2>
+  <div id="postList"></div>
+
+  <button onclick="logout()">Logout</button>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

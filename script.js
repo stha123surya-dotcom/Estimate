@@ -1,96 +1,104 @@
-const roomData = {
-    bedroom: { size: 120, label: "Bedroom" },
-    toilet: { size: 36, label: "Toilet" },
-    attachedToilet: { size: 33, label: "Attached Toilet" },
-    staircase: { size: 97.5, label: "Staircase" },
-    kitchenDining: { size: 195, label: "Kitchen Dining" },
-    porch: { size: 168, label: "Porch" },
-    balcony: { size: 18, label: "Balcony" },
-    laundry: { size: 30, label: "Laundry" }
+// Default login
+const defaultUser = {
+  username: "admin",
+  password: "1234"
 };
 
-// GENERATE FLOORS
-function generateFloors() {
-    const count = document.getElementById("floorCount").value;
-    const container = document.getElementById("floors-container");
+// LOGIN
+function login() {
+  let user = document.getElementById("username").value;
+  let pass = document.getElementById("password").value;
 
-    container.innerHTML = "";
-
-    for (let i = 1; i <= count; i++) {
-
-        let roomsHTML = "";
-
-        for (let key in roomData) {
-            roomsHTML += `
-                <div class="room-box">
-                    <label>${roomData[key].label}</label>
-                    <span>${roomData[key].size} sq.ft</span>
-                    <input type="number" min="0" value="0" 
-                    id="${key}_${i}" oninput="calculateAll()">
-                </div>
-            `;
-        }
-
-        container.innerHTML += `
-            <div class="floor">
-                <h3>Floor ${i}</h3>
-                <div class="room-grid">${roomsHTML}</div>
-                <p class="floor-result">Area: 
-                    <span id="floor${i}">0</span> sq.ft
-                </p>
-            </div>
-        `;
-    }
-
-    calculateAll();
+  if (user === defaultUser.username && pass === defaultUser.password) {
+    localStorage.setItem("loggedIn", "true");
+    window.location.href = "dashboard.html";
+  } else {
+    alert("Invalid login");
+  }
 }
 
-// CALCULATE
-function calculateFloor(floor) {
-    let total = 0;
-
-    for (let key in roomData) {
-        let val = parseInt(document.getElementById(`${key}_${floor}`)?.value) || 0;
-        total += val * roomData[key].size;
-    }
-
-    total += total * 0.20; // lobby
-
-    document.getElementById(`floor${floor}`).innerText = total.toFixed(0);
-
-    return total;
+// LOGOUT
+function logout() {
+  localStorage.removeItem("loggedIn");
+  window.location.href = "login.html";
 }
 
-function calculateAll() {
-    const count = parseInt(document.getElementById("floorCount").value) || 1;
-    let totalArea = 0;
-    let totalCost = 0;
-
-    const baseRate = parseFloat(document.getElementById("costType").value) || 0;
-
-    for (let i = 1; i <= count; i++) {
-        let floorArea = calculateFloor(i);
-        totalArea += floorArea;
-
-        // COST LOGIC
-        let rateMultiplier = (i === 1) ? 1.5 : 1; // 1st floor = 1.5x
-        let floorCost = floorArea * baseRate * rateMultiplier;
-
-        totalCost += floorCost;
-    }
-
-    // UPDATE UI
-    document.getElementById("totalArea").innerText =
-        totalArea.toLocaleString() + " sq.ft";
-
-    document.getElementById("totalCost").innerText =
-        "Rs. " + Math.round(totalCost).toLocaleString();
+// CHECK LOGIN
+if (window.location.pathname.includes("dashboard.html")) {
+  if (localStorage.getItem("loggedIn") !== "true") {
+    window.location.href = "login.html";
+  }
 }
 
-// INIT
-document.addEventListener("DOMContentLoaded", () => {
-    document.getElementById("floorCount").addEventListener("input", generateFloors);
-    document.getElementById("costType").addEventListener("change", calculateAll);
+// ADD BLOG
+function addPost() {
+  let title = document.getElementById("title").value;
+  let content = document.getElementById("content").value;
 
-    generateFloors();
-});
+  let posts = JSON.parse(localStorage.getItem("posts")) || [];
+
+  posts.push({
+    title: title,
+    content: content,
+    date: new Date().toLocaleString()
+  });
+
+  localStorage.setItem("posts", JSON.stringify(posts));
+
+  alert("Blog Published!");
+  displayPosts();
+}
+
+// DISPLAY BLOGS (Dashboard)
+function displayPosts() {
+  let posts = JSON.parse(localStorage.getItem("posts")) || [];
+  let postList = document.getElementById("postList");
+
+  if (!postList) return;
+
+  postList.innerHTML = "";
+
+  posts.forEach((post, index) => {
+    postList.innerHTML += `
+      <div class="post">
+        <h3>${post.title}</h3>
+        <p>${post.content}</p>
+        <small>${post.date}</small>
+        <br>
+        <button onclick="deletePost(${index})">Delete</button>
+      </div>
+    `;
+  });
+}
+
+// DELETE BLOG
+function deletePost(index) {
+  let posts = JSON.parse(localStorage.getItem("posts")) || [];
+  posts.splice(index, 1);
+  localStorage.setItem("posts", JSON.stringify(posts));
+  displayPosts();
+}
+
+// DISPLAY BLOGS (Public)
+function loadBlogs() {
+  let posts = JSON.parse(localStorage.getItem("posts")) || [];
+  let blogDiv = document.getElementById("blogs");
+
+  if (!blogDiv) return;
+
+  blogDiv.innerHTML = "";
+
+  posts.reverse().forEach(post => {
+    blogDiv.innerHTML += `
+      <div class="post">
+        <h2>${post.title}</h2>
+        <p>${post.content}</p>
+        <small>${post.date}</small>
+      </div>
+    `;
+  });
+}
+
+// LOAD FUNCTIONS
+displayPosts();
+loadBlogs();
