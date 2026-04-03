@@ -9,17 +9,22 @@
 <div class="dashboard">
   <h1>Blog Dashboard</h1>
 
-  <input type="text" id="title" placeholder="Blog Title">
-  <textarea id="content" placeholder="Write your blog..."></textarea>
+<input type="text" id="title" placeholder="Title">
+<select id="category">
+  <option>Architecture</option>
+  <option>Construction</option>
+  <option>Interior</option>
+</select>
+<textarea id="content"></textarea>
+<input type="file" id="image">
+<button onclick="addPost()">Publish</button>
 
-  <button onclick="addPost()">Publish Blog</button>
-
-  <h2>All Blogs</h2>
+  <h2>All Posts</h2>
   <div id="postList"></div>
-
+<button onclick="editPost('${docSnap.id}')">Edit</button>
   <button onclick="logout()">Logout</button>
 </div>
-<script type="module" src="script.js"></script>
 
+<script type="module" src="/js/dashboard.js"></script>
 </body>
 </html>
