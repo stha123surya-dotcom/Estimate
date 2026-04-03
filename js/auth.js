@@ -2,9 +2,13 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
 import { getAuth, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
 const firebaseConfig = {
-  apiKey: "YOUR_KEY",
-  authDomain: "YOUR_DOMAIN",
-  projectId: "YOUR_ID",
+  apiKey: "AIzaSyCiyhYvFd-VAZDZ4rE3IcyhR1xr9kf9rEc",
+  authDomain: "snsbuilsers-blogs.firebaseapp.com",
+  projectId: "snsbuilsers-blogs",
+  storageBucket: "snsbuilsers-blogs.firebasestorage.app",
+  messagingSenderId: "355994579103",
+  appId: "1:355994579103:web:dcbbc597761c133e1e32aa",
+  measurementId: "G-T0K9MBPWNP"
 };
 
 const app = initializeApp(firebaseConfig);
