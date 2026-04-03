@@ -1,94 +1,63 @@
-// Default login
-const defaultUser = {
-  username: "admin",
-  password: "1234"
-};
+// FIREBASE IMPORT
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore, addDoc, collection, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-// LOGIN
-function login() {
-  let user = document.getElementById("username").value;
-  let pass = document.getElementById("password").value;
+// YOUR CONFIG (PASTE HERE)
 
-  if (user === defaultUser.username && pass === defaultUser.password) {
-    localStorage.setItem("loggedIn", "true");
-    window.location.href = "dashboard.html";
-  } else {
-    alert("Invalid login");
-  }
-}
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-analytics.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
 
-// LOGOUT
-function logout() {
-  localStorage.removeItem("loggedIn");
-  window.location.href = "login.html";
-}
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyCiyhYvFd-VAZDZ4rE3IcyhR1xr9kf9rEc",
+    authDomain: "snsbuilsers-blogs.firebaseapp.com",
+    projectId: "snsbuilsers-blogs",
+    storageBucket: "snsbuilsers-blogs.firebasestorage.app",
+    messagingSenderId: "355994579103",
+    appId: "1:355994579103:web:dcbbc597761c133e1e32aa",
+    measurementId: "G-T0K9MBPWNP"
+  };
 
-// CHECK LOGIN
-if (window.location.pathname.includes("dashboard.html")) {
-  if (localStorage.getItem("loggedIn") !== "true") {
-    window.location.href = "login.html";
-  }
-}
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+
+
+// INIT
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
 // ADD BLOG
-function addPost() {
+window.addPost = async function () {
   let title = document.getElementById("title").value;
   let content = document.getElementById("content").value;
 
-  let posts = JSON.parse(localStorage.getItem("posts")) || [];
-
-  posts.push({
-    title: title,
-    content: content,
+  await addDoc(collection(db, "posts"), {
+    title,
+    content,
     date: new Date().toLocaleString()
   });
 
-  localStorage.setItem("posts", JSON.stringify(posts));
-
   alert("Blog Published!");
-  displayPosts();
-}
+  loadPosts();
+};
 
-// DISPLAY BLOGS (Dashboard)
-function displayPosts() {
-  let posts = JSON.parse(localStorage.getItem("posts")) || [];
-  let postList = document.getElementById("postList");
-
-  if (!postList) return;
-
-  postList.innerHTML = "";
-
-  posts.forEach((post, index) => {
-    postList.innerHTML += `
-      <div class="post">
-        <h3>${post.title}</h3>
-        <p>${post.content}</p>
-        <small>${post.date}</small>
-        <br>
-        <button onclick="deletePost(${index})">Delete</button>
-      </div>
-    `;
-  });
-}
-
-// DELETE BLOG
-function deletePost(index) {
-  let posts = JSON.parse(localStorage.getItem("posts")) || [];
-  posts.splice(index, 1);
-  localStorage.setItem("posts", JSON.stringify(posts));
-  displayPosts();
-}
-
-// DISPLAY BLOGS (Public)
-function loadBlogs() {
-  let posts = JSON.parse(localStorage.getItem("posts")) || [];
-  let blogDiv = document.getElementById("blogs");
+// LOAD BLOGS
+async function loadPosts() {
+  const querySnapshot = await getDocs(collection(db, "posts"));
+  const blogDiv = document.getElementById("blogs") || document.getElementById("postList");
 
   if (!blogDiv) return;
 
   blogDiv.innerHTML = "";
 
-  posts.reverse().forEach(post => {
+  querySnapshot.forEach((docSnap) => {
+    let post = docSnap.data();
+
     blogDiv.innerHTML += `
       <div class="post">
         <h2>${post.title}</h2>
@@ -99,6 +68,5 @@ function loadBlogs() {
   });
 }
 
-// LOAD FUNCTIONS
-displayPosts();
-loadBlogs();
+// LOAD ON PAGE
+loadPosts();
