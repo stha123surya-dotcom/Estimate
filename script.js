@@ -8,15 +8,16 @@ import { getFirestore, addDoc, collection, getDocs, deleteDoc, doc } from "https
 
   // Your web app's Firebase configuration
   // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-  const firebaseConfig = {
-    apiKey: "AIzaSyCiyhYvFd-VAZDZ4rE3IcyhR1xr9kf9rEc",
-    authDomain: "snsbuilsers-blogs.firebaseapp.com",
-    projectId: "snsbuilsers-blogs",
-    storageBucket: "snsbuilsers-blogs.firebasestorage.app",
-    messagingSenderId: "355994579103",
-    appId: "1:355994579103:web:dcbbc597761c133e1e32aa",
-    measurementId: "G-T0K9MBPWNP"
-  };
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyCiyhYvFd-VAZDZ4rE3IcyhR1xr9kf9rEc",
+  authDomain: "snsbuilsers-blogs.firebaseapp.com",
+  projectId: "snsbuilsers-blogs",
+  storageBucket: "snsbuilsers-blogs.firebasestorage.app",
+  messagingSenderId: "355994579103",
+  appId: "1:355994579103:web:dcbbc597761c133e1e32aa",
+  measurementId: "G-T0K9MBPWNP"
+};
 
 
 
